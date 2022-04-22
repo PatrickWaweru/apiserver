@@ -1,0 +1,28 @@
+{
+  "name": "apiserver",
+  "version": "1.0.0",
+  "description": "An API server protected by OAUTH2",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PatrickWaweru/apiserver.git"
+  },
+  "keywords": [
+    "api",
+    "server",
+    "oauth2"
+  ],
+  "author": "patnox",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PatrickWaweru/apiserver/issues"
+  },
+  "homepage": "https://github.com/PatrickWaweru/apiserver#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "util": "^0.12.3"
+  }
+}
