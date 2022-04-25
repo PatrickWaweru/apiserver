@@ -12,6 +12,7 @@ Create an OKRA account and add client credentials
 
 Create a file named .env with the following structure
 
+```
 ISSUER=<OKRA URL>
 SCOPE=<scope name>
 CLIENT_ID=<client id>
@@ -22,6 +23,8 @@ DB_PASSWORD=<mysql password>
 DB_IP=<mysql IP address>
 DB_PORT=<mysql port>
 SERVER_PORT=<server port>
+
+```
 
 Be sure to auth using OAUTH2 client credentials grant type before calling any API
 
