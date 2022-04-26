@@ -245,3 +245,13 @@ dist
 .pnp.*
 
 #############
+# ssl keys
+
+sslcert/default.crt
+sslcert/default.key
+./sslcert/default.crt
+./sslcert/default.key
+/sslcert/default.crt
+/sslcert/default.key
+
+#############
