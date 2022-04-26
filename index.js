@@ -6,13 +6,12 @@ const authMiddleware = require('./auth')
 const { initializeDatabase } = require('./database')
 const { Part } = require('./database')
 const { Prediction } = require('./database')
-const crypto = require('crypto')
-var fs = require('fs');
-var http = require('http');
-var https = require('https');
-var privateKey  = fs.readFileSync('sslcert/default.key', 'utf8');
-var certificate = fs.readFileSync('sslcert/default.crt', 'utf8');
-var credentials = {key: privateKey, cert: certificate};
+const fs = require('fs')
+const http = require('http')
+const https = require('https')
+const privateKey = fs.readFileSync('sslcert/default.key', 'utf8')
+const certificate = fs.readFileSync('sslcert/default.crt', 'utf8')
+const credentials = { key: privateKey, cert: certificate }
 
 const app = express()
 app.use(bodyParser.json())
@@ -122,13 +121,7 @@ const startServer = async () => {
     const pageSize = ((parseInt(req.query.pageSize) > 0) ? parseInt(req.query.pageSize) : 100)
     const facilityCode = ((parseInt(req.query.facilityCode) > 0) ? parseInt(req.query.facilityCode) : 14063)
     console.log('pageNumber: ' + pageNumber + ' pageSize: ' + pageSize)
-    // Test UUID
-    // getting a random RFC 4122 Version 4 UUID
-    // by using randomUUID() method
-    const val = crypto.randomUUID({disableEntropyCache : true});
 
-    // display the result
-    console.log("RFC 4122 Version 4 UUID : " + val)
     // query the DB
     Prediction
       .count({ where: { FacilityCode: facilityCode } })
@@ -165,18 +158,18 @@ const startServer = async () => {
   app.get('/predictions/:id', function (req, res) {
     Prediction.findAll({ where: { id: req.params.id } }).then(predictions => res.json(predictions))
   })
-  const http_port = process.env.HTTP_SERVER_PORT || 3000
-  const https_port = process.env.HTTPS_SERVER_PORT || 3080
+  const httpPort = process.env.HTTP_SERVER_PORT || 3000
+  const httpsPort = process.env.HTTPS_SERVER_PORT || 3080
 
-  const httpServer = http.createServer(app);
-  const httpsServer = https.createServer(credentials, app);
+  const httpServer = http.createServer(app)
+  const httpsServer = https.createServer(credentials, app)
 
   //   await promisify(app.listen).bind(app)(http_port)
-  await promisify(httpServer.listen).bind(httpServer)(http_port)
-  await promisify(httpsServer.listen).bind(httpsServer)(https_port)
+  await promisify(httpServer.listen).bind(httpServer)(httpPort)
+  await promisify(httpsServer.listen).bind(httpsServer)(httpsPort)
 
-  console.log(`APIserver Listening on HTTP port ${http_port}`)
-  console.log(`APIserver Listening on HTTPS port ${https_port}`)
+  console.log(`APIserver Listening on HTTP port ${httpPort}`)
+  console.log(`APIserver Listening on HTTPS port ${httpsPort}`)
   console.log('Mocks DWH Machine Learning predictions endpoint')
 }
 
