@@ -7,6 +7,12 @@ const { initializeDatabase } = require('./database')
 const { Part } = require('./database')
 const { Prediction } = require('./database')
 const crypto = require('crypto')
+var fs = require('fs');
+var http = require('http');
+var https = require('https');
+var privateKey  = fs.readFileSync('sslcert/default.key', 'utf8');
+var certificate = fs.readFileSync('sslcert/default.crt', 'utf8');
+var credentials = {key: privateKey, cert: certificate};
 
 const app = express()
 app.use(bodyParser.json())
@@ -159,9 +165,18 @@ const startServer = async () => {
   app.get('/predictions/:id', function (req, res) {
     Prediction.findAll({ where: { id: req.params.id } }).then(predictions => res.json(predictions))
   })
-  const port = process.env.SERVER_PORT || 3030
-  await promisify(app.listen).bind(app)(port)
-  console.log(`APIserver Listening on port ${port}`)
+  const http_port = process.env.HTTP_SERVER_PORT || 3000
+  const https_port = process.env.HTTPS_SERVER_PORT || 3080
+
+  const httpServer = http.createServer(app);
+  const httpsServer = https.createServer(credentials, app);
+
+  //   await promisify(app.listen).bind(app)(http_port)
+  await promisify(httpServer.listen).bind(httpServer)(http_port)
+  await promisify(httpsServer.listen).bind(httpsServer)(https_port)
+
+  console.log(`APIserver Listening on HTTP port ${http_port}`)
+  console.log(`APIserver Listening on HTTPS port ${https_port}`)
   console.log('Mocks DWH Machine Learning predictions endpoint')
 }
 
